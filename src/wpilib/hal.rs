@@ -12,14 +12,10 @@ use self::bindings::*;
 
 /// Must be called first
 pub fn init() -> HalResult<()> {
-    // In its current form, this cannot be replaced with a call to `hal_call!(...)`
-    let status = unsafe {
-        self::hal::HAL_Initialize(0)
-    };
-    // HAL_Initialize returns a bool
-    match status {
-        0 => Err(HalError(status)),
-        _ => Ok(()),
+    if unsafe { HAL_Initialize(0) == 1 } {
+        Ok(())
+    } else {
+        Err(HalError(0))
     }
 }
 
