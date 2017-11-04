@@ -2,7 +2,6 @@ use wpilib::hal::*;
 use wpilib::hal::bindings::*;
 
 pub struct AnalogInput {
-    channel: i32,
     port: HAL_AnalogInputHandle,
 }
 
@@ -13,10 +12,9 @@ impl AnalogInput {
     pub fn new(channel: i32) -> HalResult<AnalogInput> {
         // todo: bounds checking on channel
         let port = unsafe { HAL_GetPort(channel) };
-        hal_call!(HAL_InitializeAnalogInputPort(port))?;
+        let port = hal_call!(HAL_InitializeAnalogInputPort(port))?;
 
         Ok(AnalogInput {
-            channel,
             port,
         })
     }
