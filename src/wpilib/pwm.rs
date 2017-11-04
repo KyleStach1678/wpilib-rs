@@ -105,9 +105,9 @@ impl PWM {
     /// Useful when using older devices that can't use a fast signal.
     pub fn slow_period(&mut self, multiplier: PeriodMultiplier) -> HalResult<()> {
         match multiplier {
-            K1X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 0)),
-            K2X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 1)),
-            K4X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 3)),
+            PeriodMultiplier::K1X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 0)),
+            PeriodMultiplier::K2X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 1)),
+            PeriodMultiplier::K4X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 3)),
         }
     }
 

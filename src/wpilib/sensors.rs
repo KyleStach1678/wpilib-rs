@@ -72,7 +72,7 @@ pub fn check_analog_input_channel(channel: i32) -> bool {
     }
 }
 
-pub fn check_analog_outputChannel(channel: i32) -> bool {
+pub fn check_analog_output_channel(channel: i32) -> bool {
     unsafe {
         HAL_CheckAnalogOutputChannel(channel) == 1
     }
