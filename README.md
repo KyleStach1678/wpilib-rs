@@ -8,10 +8,16 @@ extern crate wpilib;
 
 use std::{time,thread};
 
+use wpilib::AnalogInput;
+
 fn main() {
-    let status = unsafe { wpilib::hal::HAL_Initialize(0) };
-    assert!(status == 0, "HAL failed to initialize!");
-    let input = wpilib::AnalogInput::fromChannel(1);
+    if let Err(_) = wpilib::hal::init() {
+        panic!("Failed to initialize wpilib");
+    }
+    
+    // create an analog input on channel 1
+    let input = AnalogInput::new(1);
+
     loop {
         println!("Value: {}", input.get_value());
         println!("Voltage: {}", input.get_voltage());
