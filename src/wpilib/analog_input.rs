@@ -1,46 +1,41 @@
+use wpilib::hal::*;
 use wpilib::hal::bindings::*;
 
 pub struct AnalogInput {
-    m_channel: i32,
-    m_port: HAL_AnalogInputHandle,
-//    m_accumulatorOffset: i64,
+    channel: i32,
+    port: HAL_AnalogInputHandle,
 }
 
 impl AnalogInput {
-    pub const kAccumulatorModuleNumber: i32 = 1;
-    pub const kAccumulatorNumChannels: i32 = 2;
-    pub const kAccumulatorChannels: [i32; 2] = [0, 1];
-
-    pub fn from_channel(channel: i32) -> Self {
+    /// Create an `AnalogInput` instance from a channel number
+    /// Currently does not do bound-checking
+    /// Returns `HalResult<AnalogInput>`
+    pub fn new(channel: i32) -> HalResult<AnalogInput> {
         // todo: bounds checking on channel
         let port = unsafe { HAL_GetPort(channel) };
-        let mut status: i32 = 0;
-        let analogPort = unsafe { HAL_InitializeAnalogInputPort(port, &mut status) };
-        if status != 0 {
-            // todo: error
-        }
-        return AnalogInput {
-            m_channel: channel,
-            m_port: analogPort
-        };
+        hal_call!(HAL_InitializeAnalogInputPort(port))?;
+
+        Ok(AnalogInput {
+            channel,
+            port,
+        })
     }
-    pub fn get_value(&self) -> i32 {
-        let mut status: i32 = 0;
-        let value = unsafe { HAL_GetAnalogValue(self.m_port, &mut status) };
-        // todo: check error status
-        return value;
+
+    /// Returns 0 on error
+    pub fn get_value(&self) -> HalResult<i32> {
+        hal_call!(HAL_GetAnalogValue(self.port))
     }
-    pub fn get_voltage(&self) -> f64 {
-        let mut status: i32 = 0;
-        let value = unsafe { HAL_GetAnalogVoltage(self.m_port, &mut status) };
-        // todo: check error status
-        return value;
+    /// Returns 0 on error
+    pub fn get_voltage(&self) -> HalResult<f64> {
+        hal_call!(HAL_GetAnalogVoltage(self.port))
     }
 }
 
 impl Drop for AnalogInput {
     fn drop(&mut self) {
-        unsafe { HAL_FreeAnalogInputPort(self.m_port); }
-        self.m_port = HAL_kInvalidHandle as i32;
+        unsafe {
+            HAL_FreeAnalogInputPort(self.port);
+        }
+        self.port = HAL_kInvalidHandle as i32;
     }
 }

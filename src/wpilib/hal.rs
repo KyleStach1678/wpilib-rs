@@ -10,6 +10,15 @@ pub mod bindings {
 
 use self::bindings::*;
 
+/// Must be called first
+pub fn init() -> HalResult<()> {
+    if unsafe { HAL_Initialize(0) == 1 } {
+        Ok(())
+    } else {
+        Err(HalError(0))
+    }
+}
+
 #[derive(Copy, Clone)]
 pub struct HalError(pub i32);
 
