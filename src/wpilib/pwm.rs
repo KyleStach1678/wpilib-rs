@@ -34,7 +34,7 @@ impl PWM {
         // TODO: report usage
 
         Ok(PWM {
-            handle: handle,
+            handle,
         })
     }
 
@@ -46,29 +46,23 @@ impl PWM {
 
     /// Set the parameters for PWM pulses. All values are in milliseconds.
     /// # Arguments
-    /// * `max` - the maximumum pulse width
-    /// * `deadband_max` - the high end of the deadband
-    /// * `center` - the center
-    /// * `deadband_min` - the low end of the deadband
-    /// * `min` - the minimum pulse width
-    pub fn set_config(&mut self,
-                      max: f64,
-                      deadband_max: f64,
-                      center: f64,
-                      deadband_min: f64,
-                      min: f64)
-                      -> HalResult<()> {
+    /// - `max` - the maximumum pulse width
+    /// - `deadband_max` - the high end of the deadband
+    /// - `center` - the center
+    /// - `deadband_min` - the low end of the deadband
+    /// - `min` - the minimum pulse width
+    pub fn set_config(&mut self, max: f64, deadband_max: f64, center: f64, deadband_min: f64, min: f64) -> HalResult<()> {
         hal_call!(HAL_SetPWMConfig(self.handle, max, deadband_max, center, deadband_min, min))
     }
 
     /// Set the parameters for PWM pulses according to hardware values. All values are in hardware
     /// units (usually 0-2000 for a single cycle)
     /// # Arguments
-    /// * `max` - the maximumum pulse width
-    /// * `deadband_max` - the high end of the deadband
-    /// * `center` - the center
-    /// * `deadband_min` - the low end of the deadband
-    /// * `min` - the minimum pulse width
+    /// - `max` - the maximumum pulse width
+    /// - `deadband_max` - the high end of the deadband
+    /// - `center` - the center
+    /// - `deadband_min` - the low end of the deadband
+    /// - `min` - the minimum pulse width
     pub fn set_config_raw(&mut self,
                           max: i32,
                           deadband_max: i32,
@@ -111,9 +105,9 @@ impl PWM {
     /// Useful when using older devices that can't use a fast signal.
     pub fn slow_period(&mut self, multiplier: PeriodMultiplier) -> HalResult<()> {
         match multiplier {
-            PeriodMultiplier::K1X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 0)),
-            PeriodMultiplier::K2X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 1)),
-            PeriodMultiplier::K4X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 3)),
+            K1X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 0)),
+            K2X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 1)),
+            K4X => hal_call!(HAL_SetPWMPeriodScale(self.handle, 3)),
         }
     }
 
