@@ -12,6 +12,7 @@ use self::bindings::*;
 
 /// Must be called first
 pub fn init() -> HalResult<()> {
+    // In its current form, this cannot be replaced with a call to `hal_call!(...)`
     let status = unsafe {
         self::hal::HAL_Initialize(0)
     };

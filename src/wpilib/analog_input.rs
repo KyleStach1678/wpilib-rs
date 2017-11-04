@@ -12,34 +12,34 @@ impl AnalogInput {
     pub fn new(channel: i32) -> HalResult<AnalogInput> {
         // todo: bounds checking on channel
         let port = unsafe { HAL_GetPort(channel) };
-        let mut status: i32 = 0;
         let port = unsafe {
             HAL_InitializeAnalogInputPort(port, &mut status)
         };
-
-        match status {
-            0 => {
-                Ok(AnalogInput {
-                    channel,
-                    port,
-                })
-            },
-            _ => Err(HalError(status)),
+        match hal_call!(HAL_InitializeAnalogInputPort(port)) {
+            Ok(port) => Ok(AnalogInput {
+                channel,
+                port,
+            }),
+            Err(e) => Err(e),
         }
     }
 
+    /// Returns 0 on error
     pub fn get_value(&self) -> i32 {
-        let mut status: i32 = 0;
         // TODO: check error status
-        unsafe {
-            HAL_GetAnalogValue(self.port, &mut status)
+        // for now, return 0 on error
+        match hal_call!(HAL_GetAnalogValue(self.port)) {
+            Ok(v) => v,
+            Err(_) => 0,
         }
     }
+    /// Returns 0 on error
     pub fn get_voltage(&self) -> f64 {
-        let mut status: i32 = 0;
         // TODO: check error status
-        unsafe {
-            HAL_GetAnalogVoltage(self.port, &mut status)
+        // for now, return 0 on error
+        match hal_call!(HAL_GetAnalogVoltage(self.port)) {
+            Ok(v) => v,
+            Err(_) => 0,
         }
     }
 }
