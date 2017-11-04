@@ -8,4 +8,4 @@ matrix:
     - rust: nightly
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install mvn
+  - sudo apt-get install maven
