@@ -1,4 +1,4 @@
-use hal::*;
+use wpilib::hal::bindings::*;
 
 pub struct AnalogInput {
     m_channel: i32,
@@ -11,7 +11,7 @@ impl AnalogInput {
     pub const kAccumulatorNumChannels: i32 = 2;
     pub const kAccumulatorChannels: [i32; 2] = [0, 1];
 
-    pub fn fromChannel(channel: i32) -> Self {
+    pub fn from_channel(channel: i32) -> Self {
         // todo: bounds checking on channel
         let port = unsafe { HAL_GetPort(channel) };
         let mut status: i32 = 0;
