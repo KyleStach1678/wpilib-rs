@@ -5,3 +5,6 @@ authors = ["Connor Worley <connorbworley@gmail.com>"]
 
 [build-dependencies]
 bindgen = "0.30.0"
+
+[dependencies]
+atom = "*"
